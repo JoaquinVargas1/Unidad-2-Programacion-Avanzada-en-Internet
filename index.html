@@ -27,7 +27,7 @@
         //desvanecido
         ctx.fillStyle = "rgba(128,244,242,0.2)"
         ctx.fillRect(100,100,100,100)
-        //Con marco
+        //Contorno
         ctx.strokeRect(260,260,100,100)
         ctx.strokeStyle = "green"
         ctx.lineWidth = 6
@@ -42,6 +42,24 @@
         ctx.strokeStyle = "blue"
         ctx.stroke();
         ctx.fillStyle = "green"
+        ctx.fill();
+
+        //circulos
+        ctx.strokeStyle="#1EA5B6"
+        ctx.beginPath();
+        ctx.arc(100,375,80,0,2 * Math.PI);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(200,375,80,0,2 * Math.PI);
+        ctx.fillStyle = "gray"
+        ctx.fill();
+
+        
+        ctx.beginPath();
+        ctx.arc(105,325,80,0.9,0.7 * Math.PI);
+        ctx.stroke();
+        ctx.fillStyle="red"
         ctx.fill();
 
 

@@ -55,15 +55,39 @@
         ctx.fillStyle = "gray"
         ctx.fill();
 
-        
+        //Media luna
         ctx.beginPath();
         ctx.arc(105,325,80,0.9,0.7 * Math.PI);
         ctx.stroke();
         ctx.fillStyle="red"
         ctx.fill();
+        
+        //Texto
+        ctx.font = "40px Verdana";
+        ctx.strokeText ("Hola mundo", 150,52) 
+        ctx.fillText("Hola mundo", 150,50)
 
+        //Imagen
+        var img = new Image();
+        img.src = "GHOST.png";
+        img.onload = function() {
+          ctx.drawImage(img,400,190, 100, 120);
+        };
 
-
+        //rectángulo con un color gradiente de fondo
+        var grd = ctx.createLinearGradient(550, 350, 200, 500);
+        grd.addColorStop(0, "#01FD61");
+        grd.addColorStop(1, "#0138FD");
+        ctx.fillStyle = grd;
+        ctx.fillRect(400, 400, 200, 100);
+        
+        //Radial gradient dentro de un rectángulo.
+        const grd2 = ctx.createRadialGradient(540, 70, 10, 500, 70, 100); 
+        grd2.addColorStop(0, "#01FDA5");
+        grd2.addColorStop(0.5, "#FDF501");
+        grd2.addColorStop(1, "#01B6FD");
+        ctx.fillStyle = grd2;
+        ctx.fillRect(440, 20, 150, 100);
 
     </script>
 </body>

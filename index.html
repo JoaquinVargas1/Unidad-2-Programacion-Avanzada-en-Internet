@@ -17,9 +17,27 @@
     <canvas id="myCanvas" width="600" height="500"></canvas>
 
     <script>
-        //Cuadrados
         const myCanvas = document.getElementById("myCanvas");
         const ctx = myCanvas.getContext("2d");
+
+        document.getElementById("myCanvas").addEventListener("mousedown",function(e)
+        {
+
+        ctx.fillStyle = "rgba(128,244,242,0.2)"
+        ctx.beginPath();
+        ctx.arc(e.x,e.y,50,0,2 * Math.PI);
+        ctx.fill()
+        ctx.stroke()
+        
+        })
+
+
+        
+
+
+    /*
+        //Cuadrados
+
         ctx.fillStyle = "#4C58FF"
         ctx.fillRect(20,20,100,100)
         ctx.fillStyle = "#66C9C6"
@@ -88,6 +106,9 @@
         grd2.addColorStop(1, "#01B6FD");
         ctx.fillStyle = grd2;
         ctx.fillRect(440, 20, 150, 100);
+        */
+       
+
 
     </script>
 </body>

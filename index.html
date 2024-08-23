@@ -17,26 +17,37 @@
     <canvas id="myCanvas" width="600" height="500"></canvas>
 
     <script>
-     const myCanvas = document.getElementById("myCanvas");
+    const myCanvas = document.getElementById("myCanvas");
     const ctx = myCanvas.getContext("2d");
-    let circleColor = "rgba(128,244,242,0.2)"; // Color inicial
+    let ColorCirculo = "rgba(128,244,242,0.2)"; // Color inicial
+    let esCirculo = true; // Variable para alternar entre círculo y cuadrado
 
-    // Cambiar el color de los círculos al hacer clic
+    // Cambiar el color de las figuras al hacer clic
     document.getElementById("myCanvas").addEventListener("mousedown", function(e) {
-        ctx.fillStyle = circleColor;
-        ctx.beginPath();
-        ctx.arc(e.x, e.y, 50, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.stroke();
+        ctx.fillStyle = ColorCirculo;
+
+        // Alternar entre dibujar un círculo o un cuadrado
+        if (esCirculo) {
+            ctx.beginPath();
+            ctx.arc(e.x, e.y, 50, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+        } else {
+            ctx.beginPath();
+            ctx.rect(e.x - 50, e.y - 50, 100, 100); // Dibuja un cuadrado centrado en el punto de clic
+            ctx.fill();
+            ctx.stroke();
+        }
     });
 
-    // Cambiar el color de los círculos cuando el mouse salga del canvas
+    // Cambiar el color y alternar la forma de las figuras cuando el mouse salga del canvas
     document.getElementById("myCanvas").addEventListener("mouseout", function() {
-        circleColor = getRandomColor();
+        ColorCirculo = colorRamdom(); // Cambiar color a uno aleatorio
+        esCirculo = !esCirculo; // Alternar la forma
     });
 
     // Función para generar un color aleatorio
-    function getRandomColor() {
+    function colorRamdom() {
         const r = Math.floor(Math.random() * 256);
         const g = Math.floor(Math.random() * 256);
         const b = Math.floor(Math.random() * 256);

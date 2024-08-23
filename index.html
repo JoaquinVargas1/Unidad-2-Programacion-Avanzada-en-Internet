@@ -17,31 +17,8 @@
     <canvas id="myCanvas" width="600" height="500"></canvas>
 
     <script>
-    let x = 0;
-    let y = 0;
-    pintar = true;
-
     const myCanvas = document.getElementById("myCanvas");
     const ctx = myCanvas.getContext("2d");
-    // Agregar los event listeners para mousemove
-
-    myCanvas.addEventListener("mousemove", (e) => {
-        if (pintar) {
-            dibujarPunto(ctx, e.offsetX, e.offsetY);
-            x = e.offsetX;
-            y = e.offsetY;
-        }
-    });
-
-    function dibujarPunto(ctx, x, y) {
-        ctx.beginPath();
-        ctx.arc(x, y, 2, 0, Math.PI * 2); // Dibuja un círculo con radio 2
-        ctx.fillStyle = "black";
-        ctx.fill();
-        ctx.closePath();
-    }
-    
-    
     let ColorCirculo = "rgba(128,244,242,0.2)"; // Color inicial
     let esCirculo = true; // Variable para alternar entre círculo y cuadrado
 
@@ -78,7 +55,6 @@
     }
 
         
-
 
 
     /*

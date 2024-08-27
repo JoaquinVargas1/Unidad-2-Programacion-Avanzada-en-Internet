@@ -57,6 +57,13 @@
                 ctx.fillStyle="white";
                 ctx.fillRect(0,0,600,500)
 
+                //Comprobar si salio del borde
+                if (valor_x > 600) valor_x = 0;       
+                if (valor_x < 0) valor_x = 600;       
+                if (valor_y > 500) valor_y = 0;       
+                if (valor_y < 0) valor_y = 500;       
+
+
                 ctx.fillStyle="red";
                 ctx.fillRect(valor_x,valor_y,30,30)
                 ctx.strokeRect(valor_x,valor_y,30,30)

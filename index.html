@@ -17,88 +17,135 @@
     <canvas id="myCanvas" width="600" height="500"></canvas>
 
     <script>
+        const myCanvas = document.getElementById("myCanvas");
+        const ctx = myCanvas.getContext("2d");
+        var  valor_x = 100;
+        var  valor_y = 100;
 
-    let x = 0;
-    let y = 0;
-  
-
-    const myCanvas = document.getElementById("myCanvas");
-    const ctx = myCanvas.getContext("2d");
-
-    // Agregar los event listeners para mousemove
-    myCanvas.addEventListener("mousedown", (e) => {
-        x = e.offsetX;
-        y = e.offsetY;
-        pintar = true;
-        });
+        
+        ctx.fillStyle="red";
+        ctx.fillRect(valor_x,valor_y,30,30)
+        ctx.strokeRect(valor_y,valor_x,30,30)
 
 
-    myCanvas.addEventListener("mousemove", (e) => {
-        if (pintar) {
-            dibujarPunto(ctx, e.offsetX, e.offsetY);
+        document.addEventListener('keydown',function(e){
+
+                console.log(e.keyCode)
+
+                switch(e.keyCode){
+                    case 38:
+                        valor_y -= 10;
+                    break;
+
+                    case 40:
+                        valor_y += 10;
+                    break;
+
+                    case 37:
+                        valor_x -= 10;
+                    break;
+                   
+                    case 39:
+                        valor_x += 10;
+                    break;
+                
+                }
+                paint(ctx);
+            })
+            function paint(ctx){
+
+                ctx.fillStyle="white";
+                ctx.fillRect(0,0,600,500)
+
+                ctx.fillStyle="red";
+                ctx.fillRect(valor_x,valor_y,30,30)
+                ctx.strokeRect(valor_x,valor_y,30,30)
+
+    
+            }
+
+
+        /*
+        let x = 0;
+        let y = 0;
+    
+
+        
+
+        // Agregar los event listeners para mousemove
+        myCanvas.addEventListener("mousedown", (e) => {
             x = e.offsetX;
             y = e.offsetY;
-        }
-    });
+            pintar = true;
+            });
 
-    window.addEventListener("mouseup", (e) => {
-        if (pintar) {
-            dibujarPunto(ctx, x, y, e.offsetX, e.offsetY);
-            x = 0;
-            y = 0;
-            pintar = false;
-        }
-    });
 
-    function dibujarPunto(ctx, x, y) {
-        ctx.beginPath();
-        ctx.arc(x, y, 2, 0, Math.PI * 2); // Dibuja un círculo con radio 2
-        ctx.fillStyle = "black";
-        ctx.fill();
-        ctx.closePath();
-    }
-    
-    
-    let ColorCirculo = "rgba(128,244,242,0.2)"; // Color inicial
-    let esCirculo = true; // Variable para alternar entre círculo y cuadrado
+        myCanvas.addEventListener("mousemove", (e) => {
+            if (pintar) {
+                dibujarPunto(ctx, e.offsetX, e.offsetY);
+                x = e.offsetX;
+                y = e.offsetY;
+            }
+        });
 
-    // Cambiar el color de las figuras al hacer clic
-    document.getElementById("myCanvas").addEventListener("mousedown", function(e) {
-        ctx.fillStyle = ColorCirculo;
+        window.addEventListener("mouseup", (e) => {
+            if (pintar) {
+                dibujarPunto(ctx, x, y, e.offsetX, e.offsetY);
+                x = 0;
+                y = 0;
+                pintar = false;
+            }
+        });
 
-        // Alternar entre dibujar un círculo o un cuadrado
-        if (esCirculo) {
+        function dibujarPunto(ctx, x, y) {
             ctx.beginPath();
-            ctx.arc(e.x, e.y, 50, 0, 2 * Math.PI);
+            ctx.arc(x, y, 2, 0, Math.PI * 2); // Dibuja un círculo con radio 2
+            ctx.fillStyle = "black";
             ctx.fill();
-            ctx.stroke();
-        } else {
-            ctx.beginPath();
-            ctx.rect(e.x - 50, e.y - 50, 100, 100); // Dibuja un cuadrado centrado en el punto de clic
-            ctx.fill();
-            ctx.stroke();
+            ctx.closePath();
         }
-    });
+        
+        
+        let ColorCirculo = "rgba(128,244,242,0.2)"; // Color inicial
+        let esCirculo = true; // Variable para alternar entre círculo y cuadrado
 
-    // Cambiar el color y alternar la forma de las figuras cuando el mouse salga del canvas
-    document.getElementById("myCanvas").addEventListener("mouseout", function() {
-        ColorCirculo = colorRamdom(); // Cambiar color a uno aleatorio
-        esCirculo = !esCirculo; // Alternar la forma
-    });
+        // Cambiar el color de las figuras al hacer clic
+        document.getElementById("myCanvas").addEventListener("mousedown", function(e) {
+            ctx.fillStyle = ColorCirculo;
 
-    // Función para generar un color aleatorio
-    function colorRamdom() {
-        const r = Math.floor(Math.random() * 256);
-        const g = Math.floor(Math.random() * 256);
-        const b = Math.floor(Math.random() * 256);
-        return `rgba(${r},${g},${b},0.5)`;
-    }
+            // Alternar entre dibujar un círculo o un cuadrado
+            if (esCirculo) {
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, 50, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+            } else {
+                ctx.beginPath();
+                ctx.rect(e.x - 50, e.y - 50, 100, 100); // Dibuja un cuadrado centrado en el punto de clic
+                ctx.fill();
+                ctx.stroke();
+            }
+        });
+
+        // Cambiar el color y alternar la forma de las figuras cuando el mouse salga del canvas
+        document.getElementById("myCanvas").addEventListener("mouseout", function() {
+            ColorCirculo = colorRamdom(); // Cambiar color a uno aleatorio
+            esCirculo = !esCirculo; // Alternar la forma
+        });
+
+        // Función para generar un color aleatorio
+        function colorRamdom() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgba(${r},${g},${b},0.5)`;
+        }
 
         
 
 
 
-    /*
+    
         //Cuadrados
 
         ctx.fillStyle = "#4C58FF"

@@ -21,11 +21,10 @@
         const ctx = myCanvas.getContext("2d");
         var  valor_x = 100;
         var  valor_y = 100;
+        var direction = '';
 
         
-        ctx.fillStyle="red";
-        ctx.fillRect(valor_x,valor_y,30,30)
-        ctx.strokeRect(valor_y,valor_x,30,30)
+        paint(ctx);
 
 
         document.addEventListener('keydown',function(e){
@@ -34,44 +33,72 @@
 
                 switch(e.keyCode){
                     case 38:
-                        valor_y -= 10;
+                        direction = 'up';
                     break;
 
                     case 40:
-                        valor_y += 10;
+                        direction = 'down';
                     break;
 
                     case 37:
-                        valor_x -= 10;
+                        direction = 'left';
                     break;
                    
                     case 39:
-                        valor_x += 10;
+                        direction = 'right';
                     break;
                 
                 }
-                paint(ctx);
             })
-            function paint(ctx){
+
+            function update(){
+                switch(direction)
+                {
+                    case 'up':
+                    valor_y -= 10;
+                    if(valor_y < 0){
+                            valor_y = 500;;  
+                        }                   
+                    break;
+                    case 'down':
+                    valor_y += 10;
+
+                        if(valor_y > 500){
+                            valor_y = 0;;  
+                        }                
+                    break;
+                    case 'left':
+                    valor_x -= 10;
+                    if(valor_x < 0){
+                            valor_x = 600;  
+                        }   
+                        break;
+                    case 'right':
+                    valor_x += 10;
+                    if(valor_x > 600){
+                            valor_x = 0;  
+                        } 
+           
+                    break;
+                }
+            }
+
+
+            function paint(){
 
                 ctx.fillStyle="white";
                 ctx.fillRect(0,0,600,500)
-
-                //Comprobar si salio del borde
-                if (valor_x > 600) valor_x = 0;       
-                if (valor_x < 0) valor_x = 600;       
-                if (valor_y > 500) valor_y = 0;       
-                if (valor_y < 0) valor_y = 500;       
 
 
                 ctx.fillStyle="red";
                 ctx.fillRect(valor_x,valor_y,30,30)
                 ctx.strokeRect(valor_x,valor_y,30,30)
 
-    
+                update()
+                requestAnimationFrame(paint);
             }
 
-
+            requestAnimationFrame(paint);
         /*
         let x = 0;
         let y = 0;

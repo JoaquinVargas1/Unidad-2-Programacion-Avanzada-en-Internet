@@ -22,6 +22,7 @@
         var  valor_x = 100;
         var  valor_y = 100;
         var direction = '';
+        var speed = 5;
 
         
   
@@ -47,6 +48,9 @@
                     case 39:
                         direction = 'right';
                     break;
+                    case 32:
+                        speed += 5;
+                    break;
                 
                 }
             })
@@ -55,26 +59,25 @@
                 switch(direction)
                 {
                     case 'up':
-                    valor_y -= 10;
+                    valor_y -= speed;
                     if(valor_y < 0){
                             valor_y = 500;;  
                         }                   
                     break;
                     case 'down':
-                    valor_y += 10;
-
+                    valor_y += speed;
                         if(valor_y > 500){
                             valor_y = 0;;  
                         }                
                     break;
                     case 'left':
-                    valor_x -= 10;
+                    valor_x -= speed;
                     if(valor_x < 0){
                             valor_x = 600;  
                         }   
-                        break;
+                    break;
                     case 'right':
-                    valor_x += 10;
+                    valor_x += speed;
                     if(valor_x > 600){
                             valor_x = 0;  
                         } 
@@ -89,6 +92,9 @@
                 ctx.fillStyle="white";
                 ctx.fillRect(0,0,600,500)
 
+                ctx.fillStyle="black";
+                ctx.font ="30px Arial";
+                ctx.fillText("Speed:"+speed, 430,50)
 
                 ctx.fillStyle="red";
                 ctx.fillRect(valor_x,valor_y,30,30)

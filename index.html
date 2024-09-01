@@ -14,13 +14,114 @@
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="780" height="600"></canvas>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
 
     <script>
         const myCanvas = document.getElementById("myCanvas");
         const ctx = myCanvas.getContext("2d");
 
+        // Dibujar cielo
+        ctx.fillStyle = '#87CEEB';  
+        ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
 
+        // Función para dibujar montañas
+        function dibujarMontaña(x, y, width, height, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x, y);  
+            ctx.lineTo(x + width / 2, y - height);  
+            ctx.lineTo(x + width, y);  
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // Dibujar montañas
+        dibujarMontaña(-50, 450, 400, 300, '#8B7765');  
+        dibujarMontaña(230, 450, 400, 350, '#A0522D');  
+        dibujarMontaña(450, 450, 400, 300, '#8B7765');  
+
+        // Dibujar hierba
+        ctx.fillStyle = '#32CD32';  
+        ctx.fillRect(0, 400, 800, 300);
+        ctx.fillStyle = '#8B4513'; 
+        ctx.fillRect(0, 580, 800, 100);  
+
+
+        // Dibujar sol
+        ctx.fillStyle = 'yellow'; 
+        ctx.beginPath();
+        ctx.arc(700, 100, 50, 0, Math.PI * 2, true);  
+        ctx.fill();
+
+     
+        // Dibujar nubes
+        function dibujarNube(x, y) {
+            ctx.fillStyle = 'white';  
+            ctx.beginPath();
+            ctx.arc(x, y, 30, 0, Math.PI * 2, true);  
+            ctx.arc(x + 40, y, 40, 0, Math.PI * 2, true); 
+            ctx.arc(x + 80, y, 30, 0, Math.PI * 2, true);  
+            ctx.fill();
+        }
+
+        dibujarNube(200, 100);  
+        dibujarNube(450, 80);   
+
+        // Dibujar casa 
+        ctx.fillStyle = '#B22222';  
+        ctx.beginPath();
+        ctx.moveTo(250, 400);  
+        ctx.lineTo(400, 250);  
+        ctx.lineTo(550, 400);  
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#DEB887';  
+        ctx.fillRect(270, 400, 260, 155);  
+
+        ctx.fillStyle = '#8B4513';  
+        ctx.fillRect(370, 450, 60, 100); 
+        ctx.strokeStyle = 'black'
+        ctx.lineWidth = 3
+        ctx.strokeRect(370, 450, 60, 100); 
+        ctx.fillStyle = 'black';  
+        ctx.beginPath();
+        ctx.arc(420, 500, 5, 0, Math.PI * 2, true);  
+        ctx.fill();
+
+
+        ctx.fillStyle = '#FFFFFF';  
+        ctx.fillRect(290, 430, 50, 50);  
+        ctx.fillRect(460, 430, 50, 50); 
+        ctx.strokeStyle = "#B22222"
+        ctx.lineWidth = 4
+        ctx.strokeRect(290, 430, 50, 50);  
+        ctx.strokeRect(460, 430, 50, 50); 
+        ctx.fillStyle = '#B22222'
+        ctx.fillRect(290, 452, 50, 4);
+        ctx.fillRect(460, 452, 50, 4);
+        ctx.fillRect(312, 430, 4, 50);
+        ctx.fillRect(482, 430, 4, 50);
+
+
+        // Dibujar árboles
+        function dibujarArbol(x, y) {
+            ctx.fillStyle = '#8B4513';  
+            ctx.fillRect(x+10, y, 30, 100);  
+
+            ctx.fillStyle = '#228B22';  
+            ctx.beginPath();
+            ctx.arc(x, y, 30, 0, Math.PI * 2, true);  
+            ctx.arc(x + 25, y, 40, 0, Math.PI * 2, true);  
+            ctx.arc(x + 55, y, 30, 0, Math.PI * 2, true);  
+            ctx.fill();
+        }
+
+        dibujarArbol(100, 450); 
+        dibujarArbol(630, 450);  
+
+
+        /*
         // Dibujar fondo
         ctx.fillStyle = '#A8E7FF';
         ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
@@ -120,7 +221,7 @@
 
         ctx.fillStyle = '#BE953B';
         ctx.fillRect(0, 520, 800, 80);
-
+        */
 
 
         /*

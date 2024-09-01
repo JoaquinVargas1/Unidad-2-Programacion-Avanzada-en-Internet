@@ -14,18 +14,120 @@
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="600" height="500"></canvas>
+    <canvas id="myCanvas" width="780" height="600"></canvas>
 
     <script>
         const myCanvas = document.getElementById("myCanvas");
         const ctx = myCanvas.getContext("2d");
+
+
+        // Dibujar fondo
+        ctx.fillStyle = '#A8E7FF';
+        ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
+
+        // Dibujar cuadrado grande
+        ctx.fillStyle = 'black';
+        ctx.fillRect(185, 225, 190, 260);
+
+        ctx.fillStyle = '#37B4E1';
+        ctx.fillRect(190, 230, 180, 250);
+
+        // Dibujar círculos en las esquinas del cuadrado
+        const dibujarCirculo = (x, y) => {
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'gray';
+            ctx.beginPath();
+            ctx.arc(x + 2, y + 2, 7.5, 0, Math.PI * 2);
+            ctx.fill();
+        };
+
+        dibujarCirculo(205, 245);
+        dibujarCirculo(355, 245);
+        dibujarCirculo(205, 475);
+        dibujarCirculo(355, 475);
+
+        // Dibujar más rectángulos y figuras
+        ctx.fillStyle = 'black';
+        ctx.fillRect(95, 305, 170, 180);
+
+        ctx.fillStyle = '#FFBABA';
+        ctx.fillRect(100, 310, 160, 170);
+
+        dibujarCirculo(115, 325);
+        dibujarCirculo(255, 325);
+        dibujarCirculo(115, 465);
+        dibujarCirculo(255, 465);
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(260, 335, 30, 155);
+        ctx.fillRect(370, 265, 30, 235);
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(620, 305, 170, 190);
+
+        ctx.fillStyle = '#51FF5C';
+        ctx.fillRect(625, 310, 160, 240);
+
+        dibujarCirculo(640, 325);
+        dibujarCirculo(640, 465);
+
+        // Dibujar cubo moneda
+        const cuboMoneda = (x, y) => {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(x, y, 70, 70);
+
+            ctx.fillStyle = '#BE953B';
+            ctx.fillRect(x + 5, y + 5, 60, 60);
+
+            ctx.fillStyle = 'black';
+            ctx.fillRect(x + 10, y + 10, 5, 5);
+            ctx.fillRect(x + 55, y + 10, 5, 5);
+            ctx.fillRect(x + 10, y + 45, 5, 5);
+            ctx.fillRect(x + 55, y + 45, 5, 5);
+        };
+
+        cuboMoneda(15, 145);
+        cuboMoneda(145, 45);
+        cuboMoneda(210, 45);
+        cuboMoneda(645, 145);
+
+        // Dibujar tubería
+        ctx.fillStyle = 'black';
+        ctx.fillRect(455, 355, 90, 130);
+
+        ctx.fillStyle = '#288E1A';
+        ctx.fillRect(460, 360, 80, 120);
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(440, 305, 120, 55);
+
+        ctx.fillStyle = '#288E1A';
+        ctx.fillRect(445, 310, 110, 45);
+
+        // Dibujar piso
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 480, 800, 5);
+
+        ctx.fillStyle = '#FFBF7D';
+        ctx.fillRect(0, 485, 800, 40);
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 515, 800, 5);
+
+        ctx.fillStyle = '#BE953B';
+        ctx.fillRect(0, 520, 800, 80);
+
+
+
+        /*
         var  valor_x = 100;
         var  valor_y = 100;
         var direction = '';
         var speed = 5;
-
-        
-  
 
 
         document.addEventListener('keydown',function(e){
@@ -105,6 +207,9 @@
             }
 
             requestAnimationFrame(paint);
+
+
+        */
         /*
         let x = 0;
         let y = 0;

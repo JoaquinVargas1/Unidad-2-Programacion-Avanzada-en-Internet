@@ -20,6 +20,77 @@
         const myCanvas = document.getElementById("myCanvas");
         const ctx = myCanvas.getContext("2d");
 
+        // Fondo
+        ctx.fillStyle = '#B1FAFE';  
+        ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
+
+        // Cuerpo 
+        ctx.fillStyle = 'green'; 
+        ctx.fillRect(350, 200, 100, 100); 
+
+        // Cuello
+        ctx.fillStyle = '#fddbb0'; 
+        ctx.fillRect(380, 190, 40, 15); 
+
+        // Cabeza
+        ctx.fillStyle = '#fddbb0'; 
+        ctx.beginPath();
+        ctx.arc(400, 150, 50, 0, Math.PI * 2, true); 
+        ctx.fill();
+
+        // Ojos
+        ctx.fillStyle = 'white'; 
+        ctx.beginPath();
+        ctx.arc(385, 140, 10, 0, Math.PI * 2, true); 
+        ctx.arc(415, 140, 10, 0, Math.PI * 2, true); 
+        ctx.fill();
+
+        ctx.fillStyle = 'black'; 
+        ctx.beginPath();
+        ctx.arc(385, 140, 5, 0, Math.PI * 2, true); 
+        ctx.arc(415, 140, 5, 0, Math.PI * 2, true); 
+        ctx.fill();
+
+        // Boca
+        ctx.strokeStyle = 'black'; 
+        ctx.beginPath();
+        ctx.arc(400, 160, 15, 0, Math.PI, false); 
+        ctx.stroke();
+
+        // Gorra
+        ctx.fillStyle = 'black';
+        ctx.beginPath();
+        ctx.arc(400, 130, 50, 0, Math.PI, true); 
+        ctx.fill();
+        ctx.fillStyle = 'black'; 
+        ctx.fillRect(350, 120, 115, 10); 
+
+        // Brazos 
+        ctx.fillStyle = '#fddbb0'; 
+        ctx.fillRect(325, 200, 25, 110); 
+        ctx.fillRect(450, 200, 25, 110); 
+
+        // Mangas
+        ctx.fillStyle = 'green'; 
+        ctx.fillRect(325, 200, 25, 30); 
+        ctx.fillRect(450, 200, 25, 30); 
+
+        // Cadera
+        ctx.fillStyle = 'blue'; 
+        ctx.fillRect(350, 300, 100, 50); 
+
+        // Piernas
+        ctx.fillStyle = 'blue'; 
+        ctx.fillRect(350, 350, 45, 50); 
+        ctx.fillRect(405, 350, 45, 50); 
+
+        // Botas
+        ctx.fillStyle = '#333'; 
+        ctx.fillRect(345, 400, 50, 25); 
+        ctx.fillRect(405, 400, 50, 25); 
+        
+
+        /*
         // Dibujar cielo
         ctx.fillStyle = '#87CEEB';  
         ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
@@ -119,7 +190,7 @@
 
         dibujarArbol(100, 450); 
         dibujarArbol(630, 450);  
-
+        */
 
         /*
         // Dibujar fondo

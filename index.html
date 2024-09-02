@@ -20,6 +20,106 @@
         const myCanvas = document.getElementById("myCanvas");
         const ctx = myCanvas.getContext("2d");
 
+
+        // Color fondo 
+        ctx.fillStyle = '#0000AA'; 
+        ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
+
+        // Dibujar anillos
+        function dibujarAnillo(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 30, 0, Math.PI * 2, true);
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = 'yellow';
+            ctx.stroke();
+        }
+
+        dibujarAnillo(150, 430);
+        dibujarAnillo(250, 430);
+        dibujarAnillo(350, 430);
+
+        // Dibujar palmeras
+        function dibujarPalmera(x, y) {
+            // Tronco
+            ctx.fillStyle = '#8B4513'; 
+            ctx.fillRect(x, y, 15, 230);
+            
+            // Hojas
+            ctx.fillStyle = '#00FF00'; 
+            ctx.beginPath();
+            ctx.arc(x - 15 , y, 40, 0, Math.PI, true);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 35, y , 40, 0, Math.PI, true);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x - 35 , y - 20, 40, 0, Math.PI, true);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 55, y - 20 , 40, 0, Math.PI, true);
+            ctx.fill();
+            ctx.arc(x - 25 , y - 45, 60, 0, Math.PI, true);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 45, y - 45 , 60, 0, Math.PI, true);
+            ctx.fill();
+            
+        }
+
+        
+        dibujarPalmera(0, 250);
+        dibujarPalmera(500, 250);
+
+        // Dibujar girasol
+        function dibujarGirasol(x, y) {
+            // Tallo
+            ctx.fillStyle = '#228B22';
+            ctx.fillRect(x, y, 8, 80);
+
+            // Flor
+            ctx.fillStyle = 'yellow'; 
+            ctx.beginPath();
+            ctx.arc(x + 2.5, y, 30, 0, Math.PI * 2, true);
+            ctx.fill();
+
+            ctx.fillStyle = '#6B8E23'; 
+            ctx.beginPath();
+            ctx.arc(x + 2.5, y, 14, 0, Math.PI * 2, true);
+            ctx.fill();
+        }
+
+        
+        dibujarGirasol(650, 400);
+
+
+        // Dibujar suelo
+        ctx.fillStyle = '#00FF00'; 
+        ctx.fillRect(0, myCanvas.height - 120, myCanvas.width, 20);
+        
+
+        ctx.fillStyle = '#32CD32'; 
+        ctx.fillRect(0, myCanvas.height - 100, myCanvas.width, 20);
+        
+ 
+        ctx.fillStyle = '#228B22'; 
+        ctx.fillRect(0, myCanvas.height - 80, myCanvas.width, 20);
+
+
+        function dibujarSuelo() {
+            const colors = ['#8B4513', '#DEB887']; 
+            const size = 20;
+            for (let i = 0; i < myCanvas.width; i += size) {
+                for (let j = myCanvas.height - 60; j < myCanvas.height; j += size) {
+                    ctx.fillStyle = colors[(i + j) / size % 2];
+                    ctx.fillRect(i, j, size, size);
+                }
+            }
+        }
+        dibujarSuelo();
+
+
+
+         /*
         // Fondo
         ctx.fillStyle = '#B1FAFE';  
         ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
@@ -88,7 +188,7 @@
         ctx.fillStyle = '#333'; 
         ctx.fillRect(345, 400, 50, 25); 
         ctx.fillRect(405, 400, 50, 25); 
-        
+        */
 
         /*
         // Dibujar cielo

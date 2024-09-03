@@ -14,13 +14,160 @@
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <canvas id="myCanvas" width="600" height="500"></canvas>
 
     <script>
         const myCanvas = document.getElementById("myCanvas");
         const ctx = myCanvas.getContext("2d");
 
+        var direction = '';
+        var speed = 5;
 
+        
+        class Rectangulo {
+
+            constructor(color,w,h,x,y,speed){
+                this.color = color;
+                this.h = h;
+                this.w = w;
+                this.x = x;
+                this.y = y;
+                this.speed = speed;
+
+            }
+
+             colision(otro){
+
+                if(this.x < otro.x+otro.w &&  
+                this.x + this.w > otro.x &&  
+                this.y < otro.y + otro.h &&
+                this.y + this.h > otro.y){ 
+                    return true;    
+                } 
+                return false;
+                }
+
+        }
+
+        var player = new Rectangulo("red",50,50,100,100,5)
+        var target = new Rectangulo("black",20,20,200,200)
+        var wall = new Rectangulo("gray",250,20,150,350)
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        document.addEventListener('keydown',function(e){
+
+                console.log(e.keyCode)
+
+                switch(e.keyCode){
+                    case 38:
+                        direction = 'up';
+                    break;
+
+                    case 40:
+                        direction = 'down';
+                    break;
+
+                    case 37:
+                        direction = 'left';
+                    break;
+                   
+                    case 39:
+                        direction = 'right';
+                    break;
+                    case 32:
+                        speed += 5;
+                    break;
+                
+                }
+
+                 
+
+            })
+
+            function update(){
+
+                var prevX = player.x;
+                var prevY = player.y;
+
+                switch(direction)
+                {
+                    case 'up':
+                    player.y -= speed;
+                    if(player.y < 0){
+                        player.y = 500;;  
+                        }                   
+                    break;
+                    case 'down':
+                    player.y += speed;
+                        if(player.y > 500){
+                            player.y = 0;;  
+                        }                
+                    break;
+                    case 'left':
+                    player.x -= speed;
+                    if(player.x < 0){
+                        player.x = 600;  
+                        }   
+                    break;
+                    case 'right':
+                    player.x += speed;
+                    if(player.x > 600){
+                        player.x = 0;  
+                        } 
+           
+                    break;
+                }
+                if (player.colision(target)) {
+                    target.x = getRandomInt(0, myCanvas.width - target.w);
+                    target.y = getRandomInt(0, myCanvas.height - target.h);
+                }
+
+                if (player.colision(wall)) {
+                    player.x = prevX;
+                    player.y = prevY;
+                }
+                
+
+
+            }
+
+
+            function paint(){
+
+                ctx.fillStyle="white";
+                ctx.fillRect(0,0,600,500)
+
+                ctx.fillStyle="black";
+                ctx.font ="30px Arial";
+                ctx.fillText("Speed:"+speed, 430,50)
+
+                ctx.fillStyle=player.color;
+                ctx.fillRect(player.x,player.y,player.w,player.h)
+                ctx.strokeRect(player.x,player.y,player.w,player.h)
+
+                ctx.fillStyle=target.color;
+                ctx.fillRect(target.x,target.y,target.w,target.h)
+                ctx.strokeRect(target.x,target.y,target.w,target.h)
+
+                ctx.fillStyle=wall.color;
+                ctx.fillRect(wall.x,wall.y,wall.w,wall.h)
+                ctx.strokeRect(wall.x,wall.y,wall.w,wall.h)
+
+
+
+                update()
+                requestAnimationFrame(paint);
+            }
+
+            requestAnimationFrame(paint);
+
+
+
+
+        /*
         // Color fondo 
         ctx.fillStyle = '#0000AA'; 
         ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
@@ -116,7 +263,7 @@
             }
         }
         dibujarSuelo();
-
+        */
 
 
          /*

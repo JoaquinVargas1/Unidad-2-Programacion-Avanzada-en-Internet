@@ -19,7 +19,9 @@
     <script>
         const myCanvas = document.getElementById("myCanvas");
         const ctx = myCanvas.getContext("2d");
-
+        var walls = [];
+        var score =0;
+        var pause = false;
         var direction = '';
         var speed = 5;
 
@@ -51,7 +53,15 @@
 
         var player = new Rectangulo("red",50,50,100,100,5)
         var target = new Rectangulo("black",20,20,200,200)
-        var wall = new Rectangulo("gray",250,20,150,350)
+
+        
+        walls.push( new Rectangulo("gray",250,20,150,350));
+        walls.push( new Rectangulo("gray",250,20,150,100));
+        walls.push( new Rectangulo("gray",20,250,50,90));
+        walls.push( new Rectangulo("gray",20,250,470,90));
+
+       
+   
 
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -78,7 +88,14 @@
                         direction = 'right';
                     break;
                     case 32:
-                        speed += 5;
+                        if(pause){
+                            pause=false
+                        } 
+                        else{
+                            pause=true
+                        }  
+                        
+                        
                     break;
                 
                 }
@@ -88,11 +105,8 @@
             })
 
             function update(){
-
-                var prevX = player.x;
-                var prevY = player.y;
-
-                switch(direction)
+                if(!pause){
+                    switch(direction)
                 {
                     case 'up':
                     player.y -= speed;
@@ -123,13 +137,59 @@
                 if (player.colision(target)) {
                     target.x = getRandomInt(0, myCanvas.width - target.w);
                     target.y = getRandomInt(0, myCanvas.height - target.h);
+                    score ++;
                 }
 
-                if (player.colision(wall)) {
-                    player.x = prevX;
-                    player.y = prevY;
-                }
+                console.log(player.colision(walls))
+
+
+                walls.forEach(function(walls,i,array){
+                    if (player.colision(walls)) {
+
+                    switch(direction)
+                    {
+                        case 'up':
+                            player.y +=speed; 
+                        break;
+                        case 'down':
+                            player.y -=speed;
+                        break;
+                        case 'right':
+                            player.x -=speed;
+                        break;
+                        case 'left':
+                            player.x +=speed;
+                           break;
+                       }
+                    }
+                });
                 
+                if (player.colision(walls)) {
+
+                switch(direction)
+                {
+                    case 'up':
+                        player.y +=speed; 
+                    break;
+                    case 'down':
+                        player.y -=speed;
+                    break;
+                    case 'right':
+                        player.x -=speed;
+                    break;
+                    case 'left':
+                        player.x +=speed;
+                       break;
+                   }
+                }
+                }
+              
+
+                
+
+                
+            
+
 
 
             }
@@ -137,12 +197,22 @@
 
             function paint(){
 
-                ctx.fillStyle="white";
-                ctx.fillRect(0,0,600,500)
+                if(pause){
+                    ctx.fillStyle="green";
+                    ctx.fillRect(0,0,600,500)
+                    ctx.fillStyle="white";
+                    ctx.font ="50px Arial";
+                    ctx.fillText("P A U S E:", 170,250)
+
+                }else{
+                    ctx.fillStyle="white";
+                    ctx.fillRect(0,0,600,500)
+                }
+              
 
                 ctx.fillStyle="black";
                 ctx.font ="30px Arial";
-                ctx.fillText("Speed:"+speed, 430,50)
+                ctx.fillText("Score:"+score, 430,50)
 
                 ctx.fillStyle=player.color;
                 ctx.fillRect(player.x,player.y,player.w,player.h)
@@ -152,9 +222,12 @@
                 ctx.fillRect(target.x,target.y,target.w,target.h)
                 ctx.strokeRect(target.x,target.y,target.w,target.h)
 
-                ctx.fillStyle=wall.color;
-                ctx.fillRect(wall.x,wall.y,wall.w,wall.h)
-                ctx.strokeRect(wall.x,wall.y,wall.w,wall.h)
+                walls.forEach(function(walls,i,array){
+                    ctx.fillStyle=walls.color;
+                    ctx.fillRect(walls.x,walls.y,walls.w,walls.h)
+                    ctx.strokeRect(walls.x,walls.y,walls.w,walls.h) 
+                });
+
 
 
 

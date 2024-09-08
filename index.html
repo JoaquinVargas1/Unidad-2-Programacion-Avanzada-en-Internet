@@ -20,222 +20,162 @@
         const myCanvas = document.getElementById("myCanvas");
         const ctx = myCanvas.getContext("2d");
         var walls = [];
-        var score =0;
+        var score = 0;
         var pause = false;
         var direction = '';
         var speed = 5;
 
+        const playerImage = new Image();
+        playerImage.src = 'chavo.PNG';
         
-        class Rectangulo {
+        const targetImage = new Image();
+        targetImage.src = 'torta.png';
+        
+ 
+        const comer = new Audio('comer.mp3');
 
-            constructor(color,w,h,x,y,speed){
-                this.color = color;
+        const pausa = new Audio('pausa.mp3');
+
+        class Rectangulo {
+            constructor(image, w, h, x, y, speed) {
+                this.image = image;
                 this.h = h;
                 this.w = w;
                 this.x = x;
                 this.y = y;
                 this.speed = speed;
-
             }
 
-             colision(otro){
-
-                if(this.x < otro.x+otro.w &&  
-                this.x + this.w > otro.x &&  
-                this.y < otro.y + otro.h &&
-                this.y + this.h > otro.y){ 
-                    return true;    
-                } 
-                return false;
+            colision(otro) {
+                if (this.x < otro.x + otro.w &&
+                    this.x + this.w > otro.x &&
+                    this.y < otro.y + otro.h &&
+                    this.y + this.h > otro.y) {
+                    return true;
                 }
-
+                return false;
+            }
         }
 
-        var player = new Rectangulo("red",50,50,100,100,5)
-        var target = new Rectangulo("black",20,20,200,200)
-
         
-        walls.push( new Rectangulo("gray",250,20,150,350));
-        walls.push( new Rectangulo("gray",250,20,150,100));
-        walls.push( new Rectangulo("gray",20,250,50,90));
-        walls.push( new Rectangulo("gray",20,250,470,90));
+        var player = new Rectangulo(playerImage, 45, 145, 100, 100, 5);
+        var target = new Rectangulo(targetImage, 61, 25, 200, 200);     
 
-       
-   
+        walls.push(new Rectangulo(null, 250, 20, 150, 350));
+        walls.push(new Rectangulo(null, 250, 20, 150, 100));
+        walls.push(new Rectangulo(null, 20, 250, 50, 90));
+        walls.push(new Rectangulo(null, 20, 250, 470, 90));
 
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        document.addEventListener('keydown',function(e){
-
-                console.log(e.keyCode)
-
-                switch(e.keyCode){
-                    case 38:
-                        direction = 'up';
+        document.addEventListener('keydown', function(e) {
+            console.log(e.keyCode);
+            switch (e.keyCode) {
+                case 38:
+                    direction = 'up';
                     break;
-
-                    case 40:
-                        direction = 'down';
+                case 40:
+                    direction = 'down';
                     break;
-
-                    case 37:
-                        direction = 'left';
+                case 37:
+                    direction = 'left';
                     break;
-                   
-                    case 39:
-                        direction = 'right';
+                case 39:
+                    direction = 'right';
                     break;
-                    case 32:
-                        if(pause){
-                            pause=false
-                        } 
-                        else{
-                            pause=true
-                        }  
-                        
-                        
+                case 32:
+                    pause = !pause;
+                    pausa.play(); 
                     break;
-                
-                }
+            }
+        });
 
-                 
-
-            })
-
-            function update(){
-                if(!pause){
-                    switch(direction)
-                {
+        function update() {
+            if (!pause) {
+                switch (direction) {
                     case 'up':
-                    player.y -= speed;
-                    if(player.y < 0){
-                        player.y = 500;;  
-                        }                   
-                    break;
+                        player.y -= speed;
+                        if (player.y < 0) player.y = 500;
+                        break;
                     case 'down':
-                    player.y += speed;
-                        if(player.y > 500){
-                            player.y = 0;;  
-                        }                
-                    break;
+                        player.y += speed;
+                        if (player.y > 500) player.y = 0;
+                        break;
                     case 'left':
-                    player.x -= speed;
-                    if(player.x < 0){
-                        player.x = 600;  
-                        }   
-                    break;
+                        player.x -= speed;
+                        if (player.x < 0) player.x = 600;
+                        break;
                     case 'right':
-                    player.x += speed;
-                    if(player.x > 600){
-                        player.x = 0;  
-                        } 
-           
-                    break;
+                        player.x += speed;
+                        if (player.x > 600) player.x = 0;
+                        break;
                 }
+
                 if (player.colision(target)) {
                     target.x = getRandomInt(0, myCanvas.width - target.w);
                     target.y = getRandomInt(0, myCanvas.height - target.h);
-                    score ++;
+                    score++;
+                    comer.play(); 
                 }
 
-                console.log(player.colision(walls))
-
-
-                walls.forEach(function(walls,i,array){
-                    if (player.colision(walls)) {
-
-                    switch(direction)
-                    {
-                        case 'up':
-                            player.y +=speed; 
-                        break;
-                        case 'down':
-                            player.y -=speed;
-                        break;
-                        case 'right':
-                            player.x -=speed;
-                        break;
-                        case 'left':
-                            player.x +=speed;
-                           break;
-                       }
+                walls.forEach(function(wall) {
+                    if (player.colision(wall)) {
+                        switch (direction) {
+                            case 'up':
+                                player.y += speed;
+                                break;
+                            case 'down':
+                                player.y -= speed;
+                                break;
+                            case 'right':
+                                player.x -= speed;
+                                break;
+                            case 'left':
+                                player.x += speed;
+                                break;
+                        }
                     }
                 });
-                
-                if (player.colision(walls)) {
+            }
+        }
 
-                switch(direction)
-                {
-                    case 'up':
-                        player.y +=speed; 
-                    break;
-                    case 'down':
-                        player.y -=speed;
-                    break;
-                    case 'right':
-                        player.x -=speed;
-                    break;
-                    case 'left':
-                        player.x +=speed;
-                       break;
-                   }
-                }
-                }
-              
+        function paint() {
+            if (pause) {
+                ctx.fillStyle = "green";
+                ctx.fillRect(0, 0, 600, 500);
+                ctx.fillStyle = "white";
+                ctx.font = "50px Arial";
+                ctx.fillText("P A U S E:", 170, 250);
+            } else {
+                ctx.fillStyle = "white";
+                ctx.fillRect(0, 0, 600, 500);
+            }
 
-                
+            ctx.fillStyle = "black";
+            ctx.font = "30px Arial";
+            ctx.fillText("Score: " + score, 430, 50);
 
-                
+     
+            ctx.drawImage(player.image, player.x, player.y, player.w, player.h);
             
 
+            ctx.drawImage(target.image, target.x, target.y, target.w, target.h);
 
+            walls.forEach(function(wall) {
+                ctx.fillStyle = "gray";
+                ctx.fillRect(wall.x, wall.y, wall.w, wall.h);
+                ctx.strokeRect(wall.x, wall.y, wall.w, wall.h);
+            });
 
-            }
-
-
-            function paint(){
-
-                if(pause){
-                    ctx.fillStyle="green";
-                    ctx.fillRect(0,0,600,500)
-                    ctx.fillStyle="white";
-                    ctx.font ="50px Arial";
-                    ctx.fillText("P A U S E:", 170,250)
-
-                }else{
-                    ctx.fillStyle="white";
-                    ctx.fillRect(0,0,600,500)
-                }
-              
-
-                ctx.fillStyle="black";
-                ctx.font ="30px Arial";
-                ctx.fillText("Score:"+score, 430,50)
-
-                ctx.fillStyle=player.color;
-                ctx.fillRect(player.x,player.y,player.w,player.h)
-                ctx.strokeRect(player.x,player.y,player.w,player.h)
-
-                ctx.fillStyle=target.color;
-                ctx.fillRect(target.x,target.y,target.w,target.h)
-                ctx.strokeRect(target.x,target.y,target.w,target.h)
-
-                walls.forEach(function(walls,i,array){
-                    ctx.fillStyle=walls.color;
-                    ctx.fillRect(walls.x,walls.y,walls.w,walls.h)
-                    ctx.strokeRect(walls.x,walls.y,walls.w,walls.h) 
-                });
-
-
-
-
-                update()
-                requestAnimationFrame(paint);
-            }
-
+            update();
             requestAnimationFrame(paint);
+        }
+
+        requestAnimationFrame(paint);
+
+
 
 
 

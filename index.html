@@ -3,800 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body{
-            background-color: grey;
+    <title>Mi Primer App </title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #696969;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        canvas{
-            background-color: white;
+
+        #main {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            color: #555;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        fieldset {
+            border: none;
+            padding: 0;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            color: #28a745;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="600" height="500"></canvas>
+    <div id="main">
+        <h3> Bienvenido a {{ primer_app }}</h3>
 
+        <button @click="contador++">Click me: {{ contador }}</button>
+
+        <hr>
+        
+        <form>
+            <fieldset>
+                <label>Nombre</label>
+                <input type="text" v-model="usuario" placeholder="Escribe aquí">
+            </fieldset>
+
+            <label>Tu nombre es: <span>{{ usuario }}</span></label>
+        </form>
+
+        <hr>
+
+        <form>
+            <input type="number" v-model="num1" placeholder="Número 1">
+
+            <input type="number" v-model="num2" placeholder="Número 2">
+
+            <button v-on:click="resultado = num1 + num2" type="button">Sumar</button>
+        </form>
+
+        <div class="result">{{ resultado }}</div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
-        const myCanvas = document.getElementById("myCanvas");
-        const ctx = myCanvas.getContext("2d");
-        var walls = [];
-        var score = 0;
-        var pause = false;
-        var direction = '';
-        var speed = 5;
+        const { createApp, ref } = Vue
 
-        const playerImage = new Image();
-        playerImage.src = 'chavo.PNG';
-        
-        const targetImage = new Image();
-        targetImage.src = 'torta.png';
-        
- 
-        const comer = new Audio('comer.mp3');
+        createApp({
+            setup() {
+                const primer_app = ref('mi primera app')
+                let contador = ref(0)
+                let usuario = ref('')
+                let resultado = ref(0)
+                let num1 = ref('')
+                let num2 = ref('')
 
-        const pausa = new Audio('pausa.mp3');
-
-        class Rectangulo {
-            constructor(image, w, h, x, y, speed) {
-                this.image = image;
-                this.h = h;
-                this.w = w;
-                this.x = x;
-                this.y = y;
-                this.speed = speed;
-            }
-
-            colision(otro) {
-                if (this.x < otro.x + otro.w &&
-                    this.x + this.w > otro.x &&
-                    this.y < otro.y + otro.h &&
-                    this.y + this.h > otro.y) {
-                    return true;
-                }
-                return false;
-            }
-        }
-
-        
-        var player = new Rectangulo(playerImage, 45, 145, 100, 100, 5);
-        var target = new Rectangulo(targetImage, 61, 25, 200, 200);     
-
-        walls.push(new Rectangulo(null, 250, 20, 150, 350));
-        walls.push(new Rectangulo(null, 250, 20, 150, 100));
-        walls.push(new Rectangulo(null, 20, 250, 50, 90));
-        walls.push(new Rectangulo(null, 20, 250, 470, 90));
-
-        function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        document.addEventListener('keydown', function(e) {
-            console.log(e.keyCode);
-            switch (e.keyCode) {
-                case 38:
-                    direction = 'up';
-                    break;
-                case 40:
-                    direction = 'down';
-                    break;
-                case 37:
-                    direction = 'left';
-                    break;
-                case 39:
-                    direction = 'right';
-                    break;
-                case 32:
-                    pause = !pause;
-                    pausa.play(); 
-                    break;
-            }
-        });
-
-        function update() {
-            if (!pause) {
-                switch (direction) {
-                    case 'up':
-                        player.y -= speed;
-                        if (player.y < 0) player.y = 500;
-                        break;
-                    case 'down':
-                        player.y += speed;
-                        if (player.y > 500) player.y = 0;
-                        break;
-                    case 'left':
-                        player.x -= speed;
-                        if (player.x < 0) player.x = 600;
-                        break;
-                    case 'right':
-                        player.x += speed;
-                        if (player.x > 600) player.x = 0;
-                        break;
-                }
-
-                if (player.colision(target)) {
-                    target.x = getRandomInt(0, myCanvas.width - target.w);
-                    target.y = getRandomInt(0, myCanvas.height - target.h);
-                    score++;
-                    comer.play(); 
-                }
-
-                walls.forEach(function(wall) {
-                    if (player.colision(wall)) {
-                        switch (direction) {
-                            case 'up':
-                                player.y += speed;
-                                break;
-                            case 'down':
-                                player.y -= speed;
-                                break;
-                            case 'right':
-                                player.x -= speed;
-                                break;
-                            case 'left':
-                                player.x += speed;
-                                break;
-                        }
-                    }
-                });
-            }
-        }
-
-        function paint() {
-            if (pause) {
-                ctx.fillStyle = "green";
-                ctx.fillRect(0, 0, 600, 500);
-                ctx.fillStyle = "white";
-                ctx.font = "50px Arial";
-                ctx.fillText("P A U S E:", 170, 250);
-            } else {
-                ctx.fillStyle = "white";
-                ctx.fillRect(0, 0, 600, 500);
-            }
-
-            ctx.fillStyle = "black";
-            ctx.font = "30px Arial";
-            ctx.fillText("Score: " + score, 430, 50);
-
-     
-            ctx.drawImage(player.image, player.x, player.y, player.w, player.h);
-            
-
-            ctx.drawImage(target.image, target.x, target.y, target.w, target.h);
-
-            walls.forEach(function(wall) {
-                ctx.fillStyle = "gray";
-                ctx.fillRect(wall.x, wall.y, wall.w, wall.h);
-                ctx.strokeRect(wall.x, wall.y, wall.w, wall.h);
-            });
-
-            update();
-            requestAnimationFrame(paint);
-        }
-
-        requestAnimationFrame(paint);
-
-
-
-
-
-
-        /*
-        // Color fondo 
-        ctx.fillStyle = '#0000AA'; 
-        ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
-
-        // Dibujar anillos
-        function dibujarAnillo(x, y) {
-            ctx.beginPath();
-            ctx.arc(x, y, 30, 0, Math.PI * 2, true);
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = 'yellow';
-            ctx.stroke();
-        }
-
-        dibujarAnillo(150, 430);
-        dibujarAnillo(250, 430);
-        dibujarAnillo(350, 430);
-
-        // Dibujar palmeras
-        function dibujarPalmera(x, y) {
-            // Tronco
-            ctx.fillStyle = '#8B4513'; 
-            ctx.fillRect(x, y, 15, 230);
-            
-            // Hojas
-            ctx.fillStyle = '#00FF00'; 
-            ctx.beginPath();
-            ctx.arc(x - 15 , y, 40, 0, Math.PI, true);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x + 35, y , 40, 0, Math.PI, true);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x - 35 , y - 20, 40, 0, Math.PI, true);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x + 55, y - 20 , 40, 0, Math.PI, true);
-            ctx.fill();
-            ctx.arc(x - 25 , y - 45, 60, 0, Math.PI, true);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x + 45, y - 45 , 60, 0, Math.PI, true);
-            ctx.fill();
-            
-        }
-
-        
-        dibujarPalmera(0, 250);
-        dibujarPalmera(500, 250);
-
-        // Dibujar girasol
-        function dibujarGirasol(x, y) {
-            // Tallo
-            ctx.fillStyle = '#228B22';
-            ctx.fillRect(x, y, 8, 80);
-
-            // Flor
-            ctx.fillStyle = 'yellow'; 
-            ctx.beginPath();
-            ctx.arc(x + 2.5, y, 30, 0, Math.PI * 2, true);
-            ctx.fill();
-
-            ctx.fillStyle = '#6B8E23'; 
-            ctx.beginPath();
-            ctx.arc(x + 2.5, y, 14, 0, Math.PI * 2, true);
-            ctx.fill();
-        }
-
-        
-        dibujarGirasol(650, 400);
-
-
-        // Dibujar suelo
-        ctx.fillStyle = '#00FF00'; 
-        ctx.fillRect(0, myCanvas.height - 120, myCanvas.width, 20);
-        
-
-        ctx.fillStyle = '#32CD32'; 
-        ctx.fillRect(0, myCanvas.height - 100, myCanvas.width, 20);
-        
- 
-        ctx.fillStyle = '#228B22'; 
-        ctx.fillRect(0, myCanvas.height - 80, myCanvas.width, 20);
-
-
-        function dibujarSuelo() {
-            const colors = ['#8B4513', '#DEB887']; 
-            const size = 20;
-            for (let i = 0; i < myCanvas.width; i += size) {
-                for (let j = myCanvas.height - 60; j < myCanvas.height; j += size) {
-                    ctx.fillStyle = colors[(i + j) / size % 2];
-                    ctx.fillRect(i, j, size, size);
+                return {
+                    primer_app,
+                    contador,
+                    usuario,
+                    resultado,
+                    num1,
+                    num2
                 }
             }
-        }
-        dibujarSuelo();
-        */
-
-
-         /*
-        // Fondo
-        ctx.fillStyle = '#B1FAFE';  
-        ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
-
-        // Cuerpo 
-        ctx.fillStyle = 'green'; 
-        ctx.fillRect(350, 200, 100, 100); 
-
-        // Cuello
-        ctx.fillStyle = '#fddbb0'; 
-        ctx.fillRect(380, 190, 40, 15); 
-
-        // Cabeza
-        ctx.fillStyle = '#fddbb0'; 
-        ctx.beginPath();
-        ctx.arc(400, 150, 50, 0, Math.PI * 2, true); 
-        ctx.fill();
-
-        // Ojos
-        ctx.fillStyle = 'white'; 
-        ctx.beginPath();
-        ctx.arc(385, 140, 10, 0, Math.PI * 2, true); 
-        ctx.arc(415, 140, 10, 0, Math.PI * 2, true); 
-        ctx.fill();
-
-        ctx.fillStyle = 'black'; 
-        ctx.beginPath();
-        ctx.arc(385, 140, 5, 0, Math.PI * 2, true); 
-        ctx.arc(415, 140, 5, 0, Math.PI * 2, true); 
-        ctx.fill();
-
-        // Boca
-        ctx.strokeStyle = 'black'; 
-        ctx.beginPath();
-        ctx.arc(400, 160, 15, 0, Math.PI, false); 
-        ctx.stroke();
-
-        // Gorra
-        ctx.fillStyle = 'black';
-        ctx.beginPath();
-        ctx.arc(400, 130, 50, 0, Math.PI, true); 
-        ctx.fill();
-        ctx.fillStyle = 'black'; 
-        ctx.fillRect(350, 120, 115, 10); 
-
-        // Brazos 
-        ctx.fillStyle = '#fddbb0'; 
-        ctx.fillRect(325, 200, 25, 110); 
-        ctx.fillRect(450, 200, 25, 110); 
-
-        // Mangas
-        ctx.fillStyle = 'green'; 
-        ctx.fillRect(325, 200, 25, 30); 
-        ctx.fillRect(450, 200, 25, 30); 
-
-        // Cadera
-        ctx.fillStyle = 'blue'; 
-        ctx.fillRect(350, 300, 100, 50); 
-
-        // Piernas
-        ctx.fillStyle = 'blue'; 
-        ctx.fillRect(350, 350, 45, 50); 
-        ctx.fillRect(405, 350, 45, 50); 
-
-        // Botas
-        ctx.fillStyle = '#333'; 
-        ctx.fillRect(345, 400, 50, 25); 
-        ctx.fillRect(405, 400, 50, 25); 
-        */
-
-        /*
-        // Dibujar cielo
-        ctx.fillStyle = '#87CEEB';  
-        ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
-
-        // Función para dibujar montañas
-        function dibujarMontaña(x, y, width, height, color) {
-            ctx.fillStyle = color;
-            ctx.beginPath();
-            ctx.moveTo(x, y);  
-            ctx.lineTo(x + width / 2, y - height);  
-            ctx.lineTo(x + width, y);  
-            ctx.closePath();
-            ctx.fill();
-        }
-
-        // Dibujar montañas
-        dibujarMontaña(-50, 450, 400, 300, '#8B7765');  
-        dibujarMontaña(230, 450, 400, 350, '#A0522D');  
-        dibujarMontaña(450, 450, 400, 300, '#8B7765');  
-
-        // Dibujar hierba
-        ctx.fillStyle = '#32CD32';  
-        ctx.fillRect(0, 400, 800, 300);
-        ctx.fillStyle = '#8B4513'; 
-        ctx.fillRect(0, 580, 800, 100);  
-
-
-        // Dibujar sol
-        ctx.fillStyle = 'yellow'; 
-        ctx.beginPath();
-        ctx.arc(700, 100, 50, 0, Math.PI * 2, true);  
-        ctx.fill();
-
-     
-        // Dibujar nubes
-        function dibujarNube(x, y) {
-            ctx.fillStyle = 'white';  
-            ctx.beginPath();
-            ctx.arc(x, y, 30, 0, Math.PI * 2, true);  
-            ctx.arc(x + 40, y, 40, 0, Math.PI * 2, true); 
-            ctx.arc(x + 80, y, 30, 0, Math.PI * 2, true);  
-            ctx.fill();
-        }
-
-        dibujarNube(200, 100);  
-        dibujarNube(450, 80);   
-
-        // Dibujar casa 
-        ctx.fillStyle = '#B22222';  
-        ctx.beginPath();
-        ctx.moveTo(250, 400);  
-        ctx.lineTo(400, 250);  
-        ctx.lineTo(550, 400);  
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.fillStyle = '#DEB887';  
-        ctx.fillRect(270, 400, 260, 155);  
-
-        ctx.fillStyle = '#8B4513';  
-        ctx.fillRect(370, 450, 60, 100); 
-        ctx.strokeStyle = 'black'
-        ctx.lineWidth = 3
-        ctx.strokeRect(370, 450, 60, 100); 
-        ctx.fillStyle = 'black';  
-        ctx.beginPath();
-        ctx.arc(420, 500, 5, 0, Math.PI * 2, true);  
-        ctx.fill();
-
-
-        ctx.fillStyle = '#FFFFFF';  
-        ctx.fillRect(290, 430, 50, 50);  
-        ctx.fillRect(460, 430, 50, 50); 
-        ctx.strokeStyle = "#B22222"
-        ctx.lineWidth = 4
-        ctx.strokeRect(290, 430, 50, 50);  
-        ctx.strokeRect(460, 430, 50, 50); 
-        ctx.fillStyle = '#B22222'
-        ctx.fillRect(290, 452, 50, 4);
-        ctx.fillRect(460, 452, 50, 4);
-        ctx.fillRect(312, 430, 4, 50);
-        ctx.fillRect(482, 430, 4, 50);
-
-
-        // Dibujar árboles
-        function dibujarArbol(x, y) {
-            ctx.fillStyle = '#8B4513';  
-            ctx.fillRect(x+10, y, 30, 100);  
-
-            ctx.fillStyle = '#228B22';  
-            ctx.beginPath();
-            ctx.arc(x, y, 30, 0, Math.PI * 2, true);  
-            ctx.arc(x + 25, y, 40, 0, Math.PI * 2, true);  
-            ctx.arc(x + 55, y, 30, 0, Math.PI * 2, true);  
-            ctx.fill();
-        }
-
-        dibujarArbol(100, 450); 
-        dibujarArbol(630, 450);  
-        */
-
-        /*
-        // Dibujar fondo
-        ctx.fillStyle = '#A8E7FF';
-        ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
-
-        // Dibujar cuadrado grande
-        ctx.fillStyle = 'black';
-        ctx.fillRect(185, 225, 190, 260);
-
-        ctx.fillStyle = '#37B4E1';
-        ctx.fillRect(190, 230, 180, 250);
-
-        // Dibujar círculos en las esquinas del cuadrado
-        const dibujarCirculo = (x, y) => {
-            ctx.fillStyle = 'black';
-            ctx.beginPath();
-            ctx.arc(x, y, 10, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = 'gray';
-            ctx.beginPath();
-            ctx.arc(x + 2, y + 2, 7.5, 0, Math.PI * 2);
-            ctx.fill();
-        };
-
-        dibujarCirculo(205, 245);
-        dibujarCirculo(355, 245);
-        dibujarCirculo(205, 475);
-        dibujarCirculo(355, 475);
-
-        // Dibujar más rectángulos y figuras
-        ctx.fillStyle = 'black';
-        ctx.fillRect(95, 305, 170, 180);
-
-        ctx.fillStyle = '#FFBABA';
-        ctx.fillRect(100, 310, 160, 170);
-
-        dibujarCirculo(115, 325);
-        dibujarCirculo(255, 325);
-        dibujarCirculo(115, 465);
-        dibujarCirculo(255, 465);
-
-        ctx.fillStyle = 'black';
-        ctx.fillRect(260, 335, 30, 155);
-        ctx.fillRect(370, 265, 30, 235);
-
-        ctx.fillStyle = 'black';
-        ctx.fillRect(620, 305, 170, 190);
-
-        ctx.fillStyle = '#51FF5C';
-        ctx.fillRect(625, 310, 160, 240);
-
-        dibujarCirculo(640, 325);
-        dibujarCirculo(640, 465);
-
-        // Dibujar cubo moneda
-        const cuboMoneda = (x, y) => {
-            ctx.fillStyle = 'black';
-            ctx.fillRect(x, y, 70, 70);
-
-            ctx.fillStyle = '#BE953B';
-            ctx.fillRect(x + 5, y + 5, 60, 60);
-
-            ctx.fillStyle = 'black';
-            ctx.fillRect(x + 10, y + 10, 5, 5);
-            ctx.fillRect(x + 55, y + 10, 5, 5);
-            ctx.fillRect(x + 10, y + 45, 5, 5);
-            ctx.fillRect(x + 55, y + 45, 5, 5);
-        };
-
-        cuboMoneda(15, 145);
-        cuboMoneda(145, 45);
-        cuboMoneda(210, 45);
-        cuboMoneda(645, 145);
-
-        // Dibujar tubería
-        ctx.fillStyle = 'black';
-        ctx.fillRect(455, 355, 90, 130);
-
-        ctx.fillStyle = '#288E1A';
-        ctx.fillRect(460, 360, 80, 120);
-
-        ctx.fillStyle = 'black';
-        ctx.fillRect(440, 305, 120, 55);
-
-        ctx.fillStyle = '#288E1A';
-        ctx.fillRect(445, 310, 110, 45);
-
-        // Dibujar piso
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 480, 800, 5);
-
-        ctx.fillStyle = '#FFBF7D';
-        ctx.fillRect(0, 485, 800, 40);
-
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 515, 800, 5);
-
-        ctx.fillStyle = '#BE953B';
-        ctx.fillRect(0, 520, 800, 80);
-        */
-
-
-        /*
-        var  valor_x = 100;
-        var  valor_y = 100;
-        var direction = '';
-        var speed = 5;
-
-
-        document.addEventListener('keydown',function(e){
-
-                console.log(e.keyCode)
-
-                switch(e.keyCode){
-                    case 38:
-                        direction = 'up';
-                    break;
-
-                    case 40:
-                        direction = 'down';
-                    break;
-
-                    case 37:
-                        direction = 'left';
-                    break;
-                   
-                    case 39:
-                        direction = 'right';
-                    break;
-                    case 32:
-                        speed += 5;
-                    break;
-                
-                }
-            })
-
-            function update(){
-                switch(direction)
-                {
-                    case 'up':
-                    valor_y -= speed;
-                    if(valor_y < 0){
-                            valor_y = 500;;  
-                        }                   
-                    break;
-                    case 'down':
-                    valor_y += speed;
-                        if(valor_y > 500){
-                            valor_y = 0;;  
-                        }                
-                    break;
-                    case 'left':
-                    valor_x -= speed;
-                    if(valor_x < 0){
-                            valor_x = 600;  
-                        }   
-                    break;
-                    case 'right':
-                    valor_x += speed;
-                    if(valor_x > 600){
-                            valor_x = 0;  
-                        } 
-           
-                    break;
-                }
-            }
-
-
-            function paint(){
-
-                ctx.fillStyle="white";
-                ctx.fillRect(0,0,600,500)
-
-                ctx.fillStyle="black";
-                ctx.font ="30px Arial";
-                ctx.fillText("Speed:"+speed, 430,50)
-
-                ctx.fillStyle="red";
-                ctx.fillRect(valor_x,valor_y,30,30)
-                ctx.strokeRect(valor_x,valor_y,30,30)
-
-                update()
-                requestAnimationFrame(paint);
-            }
-
-            requestAnimationFrame(paint);
-
-
-        */
-        /*
-        let x = 0;
-        let y = 0;
-    
-
-        
-
-        // Agregar los event listeners para mousemove
-        myCanvas.addEventListener("mousedown", (e) => {
-            x = e.offsetX;
-            y = e.offsetY;
-            pintar = true;
-            });
-
-
-        myCanvas.addEventListener("mousemove", (e) => {
-            if (pintar) {
-                dibujarPunto(ctx, e.offsetX, e.offsetY);
-                x = e.offsetX;
-                y = e.offsetY;
-            }
-        });
-
-        window.addEventListener("mouseup", (e) => {
-            if (pintar) {
-                dibujarPunto(ctx, x, y, e.offsetX, e.offsetY);
-                x = 0;
-                y = 0;
-                pintar = false;
-            }
-        });
-
-        function dibujarPunto(ctx, x, y) {
-            ctx.beginPath();
-            ctx.arc(x, y, 2, 0, Math.PI * 2); // Dibuja un círculo con radio 2
-            ctx.fillStyle = "black";
-            ctx.fill();
-            ctx.closePath();
-        }
-        
-        
-        let ColorCirculo = "rgba(128,244,242,0.2)"; // Color inicial
-        let esCirculo = true; // Variable para alternar entre círculo y cuadrado
-
-        // Cambiar el color de las figuras al hacer clic
-        document.getElementById("myCanvas").addEventListener("mousedown", function(e) {
-            ctx.fillStyle = ColorCirculo;
-
-            // Alternar entre dibujar un círculo o un cuadrado
-            if (esCirculo) {
-                ctx.beginPath();
-                ctx.arc(e.x, e.y, 50, 0, 2 * Math.PI);
-                ctx.fill();
-                ctx.stroke();
-            } else {
-                ctx.beginPath();
-                ctx.rect(e.x - 50, e.y - 50, 100, 100); // Dibuja un cuadrado centrado en el punto de clic
-                ctx.fill();
-                ctx.stroke();
-            }
-        });
-
-        // Cambiar el color y alternar la forma de las figuras cuando el mouse salga del canvas
-        document.getElementById("myCanvas").addEventListener("mouseout", function() {
-            ColorCirculo = colorRamdom(); // Cambiar color a uno aleatorio
-            esCirculo = !esCirculo; // Alternar la forma
-        });
-
-        // Función para generar un color aleatorio
-        function colorRamdom() {
-            const r = Math.floor(Math.random() * 256);
-            const g = Math.floor(Math.random() * 256);
-            const b = Math.floor(Math.random() * 256);
-            return `rgba(${r},${g},${b},0.5)`;
-        }
-
-        
-
-
-
-    
-        //Cuadrados
-
-        ctx.fillStyle = "#4C58FF"
-        ctx.fillRect(20,20,100,100)
-        ctx.fillStyle = "#66C9C6"
-        ctx.fillRect(180,180,100,100)
-        //desvanecido
-        ctx.fillStyle = "rgba(128,244,242,0.2)"
-        ctx.fillRect(100,100,100,100)
-        //Contorno
-        ctx.strokeRect(260,260,100,100)
-        ctx.strokeStyle = "green"
-        ctx.lineWidth = 6
-        ctx.strokeRect(340,340,100,100)
-
-        //Triangulos
-        ctx.beginPath();
-        ctx.moveTo(400,50)
-        ctx.lineTo(300,150)
-        ctx.lineTo(500,150)
-        ctx.closePath()
-        ctx.strokeStyle = "blue"
-        ctx.stroke();
-        ctx.fillStyle = "green"
-        ctx.fill();
-
-        //circulos
-        ctx.strokeStyle="#1EA5B6"
-        ctx.beginPath();
-        ctx.arc(100,375,80,0,2 * Math.PI);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(200,375,80,0,2 * Math.PI);
-        ctx.fillStyle = "gray"
-        ctx.fill();
-
-        //Media luna
-        ctx.beginPath();
-        ctx.arc(105,325,80,0.9,0.7 * Math.PI);
-        ctx.stroke();
-        ctx.fillStyle="red"
-        ctx.fill();
-        
-        //Texto
-        ctx.font = "40px Verdana";
-        ctx.strokeText ("Hola mundo", 150,52) 
-        ctx.fillText("Hola mundo", 150,50)
-
-        //Imagen
-        var img = new Image();
-        img.src = "GHOST.png";
-        img.onload = function() {
-          ctx.drawImage(img,400,190, 100, 120);
-        };
-
-        //rectángulo con un color gradiente de fondo
-        var grd = ctx.createLinearGradient(550, 350, 200, 500);
-        grd.addColorStop(0, "#01FD61");
-        grd.addColorStop(1, "#0138FD");
-        ctx.fillStyle = grd;
-        ctx.fillRect(400, 400, 200, 100);
-        
-        //Radial gradient dentro de un rectángulo.
-        const grd2 = ctx.createRadialGradient(540, 70, 10, 500, 70, 100); 
-        grd2.addColorStop(0, "#01FDA5");
-        grd2.addColorStop(0.5, "#FDF501");
-        grd2.addColorStop(1, "#01B6FD");
-        ctx.fillStyle = grd2;
-        ctx.fillRect(440, 20, 150, 100);
-        */
-       
-
-
+        }).mount('#main')
     </script>
 </body>
 </html>
